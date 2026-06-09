@@ -1,0 +1,9 @@
+{
+  "_comment": "Copy to blah-server.config.json to point this client at a local BlahMTProtoServer. Read at build time by webpack; delete (or remove the copy) to restore the upstream production setup. rsaKey mirrors Schemas/blah-rsa-key.json in the server repo (fingerprint = fingerprintInt64, nHex = n).",
+  "dc": { "id": 2, "ip": "127.0.0.1", "port": 8443 },
+  "rsaKey": {
+    "fingerprint": "-4541269716000350128",
+    "nHex": "9287a87c7bf4daadb4e9c52ddf860c842801af863c3df2e49a2ce8b3633d3711e21566124db2205dea408055f55bfcb50d1e255bad1013bb9264efa9b32a544b5349ca4c31ef9a0b74e4d8e0c4d4b989f8a51e2cda15259995508c672138a6e416720e2bd7054fd142004b1249bc80c38b790ab39ee4da8cf1aad9ff7960aed6b1b9e861ca624e451256b20e074786a11b7a8845da27de12bfa35d682ca4a02d1727662bbdb040a9945779f1c1dea59bc445efc50f1e1e366be2bbf4bb0001e4269a0f6602eea68bc698fdff602b188a351ad2fe81953b65942bd5c4f6e4429a89427684b5dde293d0b40f3b1624b0c85ffe87877a18fea50e780a2489e0c277",
+    "e": 65537
+  }
+}

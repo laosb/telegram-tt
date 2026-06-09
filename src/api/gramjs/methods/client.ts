@@ -146,7 +146,11 @@ export async function init(initialArgs: ApiInitialArgs, onConnected?: NoneToVoid
         onPasskeyOption,
         qrCode: onRequestQrCode,
         onError: onAuthError,
-        initialMethod: platform === 'iOS' || platform === 'Android' ? 'phoneNumber' : 'qrCode',
+        // BLAH: BlahMTProtoServer only implements phone + SMS-code login (no QR / auth.exportLoginToken),
+        // so force phone login whenever the local-server override is active.
+        initialMethod: (typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG)
+          ? 'phoneNumber'
+          : (platform === 'iOS' || platform === 'Android' ? 'phoneNumber' : 'qrCode'),
         shouldThrowIfUnauthorized: Object.values(sessionData?.keys || {}).length > 0,
         webAuthToken,
         webAuthTokenFailed: onWebAuthTokenFailed,

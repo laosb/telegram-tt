@@ -8,7 +8,18 @@ import {
   sha1,
 } from '../Helpers';
 
+// BLAH: when blah-server.config.json supplies an rsaKey, register it first so
+// the client uses the local server's key (legacy sha1(data)+data+padding layout).
+const BLAH_KEYS = typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG?.rsaKey
+  ? [{
+    fingerprint: BigInt(BLAH_SERVER_CONFIG.rsaKey.fingerprint),
+    n: BigInt(`0x${BLAH_SERVER_CONFIG.rsaKey.nHex}`),
+    e: BLAH_SERVER_CONFIG.rsaKey.e,
+  }]
+  : [];
+
 export const SERVER_KEYS = [
+  ...BLAH_KEYS,
   {
     fingerprint: BigInt('-3414540481677951611'),
     n: BigInt(
