@@ -1,0 +1,9 @@
+{
+  "name": "telegram-web",
+  "compatibility_date": "2026-06-01",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
