@@ -20,7 +20,7 @@ type StateProps = {
   auth: GlobalState['auth'];
 };
 
-const CODE_LENGTH = 5;
+const DEFAULT_CODE_LENGTH = 5;
 
 const AuthCode = ({
   auth,
@@ -31,7 +31,10 @@ const AuthCode = ({
     clearAuthErrorKey,
   } = getActions();
 
-  const { phoneNumber, isCodeViaApp, fragmentUrl, isLoading, errorKey } = auth;
+  const {
+    phoneNumber, isCodeViaApp, fragmentUrl, codeLength, isLoading, errorKey,
+  } = auth;
+  const maxCodeLength = codeLength ?? DEFAULT_CODE_LENGTH;
 
   const lang = useLang();
   const inputRef = useRef<HTMLInputElement>();
@@ -57,7 +60,7 @@ const AuthCode = ({
     }
 
     const { currentTarget: target } = e;
-    target.value = target.value.replace(/[^\d]+/, '').substr(0, CODE_LENGTH);
+    target.value = target.value.replace(/[^\d]+/, '').substr(0, maxCodeLength);
 
     if (target.value === code) {
       return;
@@ -77,10 +80,10 @@ const AuthCode = ({
       setTrackingDirection(1);
     }
 
-    if (target.value.length === CODE_LENGTH) {
+    if (target.value.length === maxCodeLength) {
       setAuthCode({ code: target.value });
     }
-  }, [errorKey, code, isTracking]);
+  }, [errorKey, code, isTracking, maxCodeLength]);
 
   function handleReturnToAuthPhoneNumber() {
     returnToAuthPhoneNumber();
@@ -91,7 +94,7 @@ const AuthCode = ({
       <div className="auth-form">
         <TrackingMonkey
           code={code}
-          codeLength={CODE_LENGTH}
+          codeLength={maxCodeLength}
           isTracking={isTracking}
           trackingDirection={trackingDirection}
         />
@@ -117,7 +120,7 @@ const AuthCode = ({
         {fragmentUrl && (
           <p className="note">
             <a href={fragmentUrl} target="_blank" rel="noopener noreferrer">
-              {fragmentUrl}
+              Get Code
             </a>
           </p>
         )}

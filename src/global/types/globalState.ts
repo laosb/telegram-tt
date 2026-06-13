@@ -170,6 +170,7 @@ export type GlobalState = {
     nearestCountry?: string;
     isCodeViaApp?: boolean;
     fragmentUrl?: string;
+    codeLength?: number;
     hint?: string;
     qrCode?: {
       token: string;
