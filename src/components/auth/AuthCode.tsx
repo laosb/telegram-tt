@@ -31,7 +31,7 @@ const AuthCode = ({
     clearAuthErrorKey,
   } = getActions();
 
-  const { phoneNumber, isCodeViaApp, isLoading, errorKey } = auth;
+  const { phoneNumber, isCodeViaApp, fragmentUrl, isLoading, errorKey } = auth;
 
   const lang = useLang();
   const inputRef = useRef<HTMLInputElement>();
@@ -114,6 +114,13 @@ const AuthCode = ({
             withMarkdown: true,
           })}
         </p>
+        {fragmentUrl && (
+          <p className="note">
+            <a href={fragmentUrl} target="_blank" rel="noopener noreferrer">
+              {fragmentUrl}
+            </a>
+          </p>
+        )}
         <InputText
           ref={inputRef}
           id="sign-in-code"
