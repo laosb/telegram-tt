@@ -157,6 +157,7 @@ function onUpdateAuthorizationState<T extends GlobalState>(global: T, update: Ap
       global = updateAuth(global, {
         isCodeViaApp: update.isCodeViaApp,
         fragmentUrl: update.fragmentUrl,
+        codeLength: update.codeLength,
       });
       setGlobal(global);
       break;
