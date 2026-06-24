@@ -1,5 +1,5 @@
 {
-  "_comment": "Copy to blah-server.config.json to point this client at a local BlahMTProtoServer. Read at build time by webpack; delete (or remove the copy) to restore the upstream production setup. rsaKey mirrors Schemas/blah-rsa-key.json in the server repo (fingerprint = fingerprintInt64, nHex = n).",
+  "_comment": "Copy to blah-server.config.json to point this client at a local BlahMTProtoServer. Read at build time by Vite; delete (or remove the copy) to restore the upstream production setup. rsaKey mirrors Schemas/blah-rsa-key.json in the server repo (fingerprint = fingerprintInt64, nHex = n).",
   "dc": { "id": 2, "ip": "127.0.0.1", "port": 8443 },
   "rsaKey": {
     "fingerprint": "-4541269716000350128",
