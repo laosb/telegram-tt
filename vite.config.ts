@@ -12,6 +12,8 @@ import packageJson from './package.json' with { type: 'json' };
 
 const DIR_NAME = dirname(fileURLToPath(import.meta.url));
 const CHANGELOG_PATH = resolve(DIR_NAME, 'src/versionNotification.txt');
+// BLAH: optional local-server override read at build time (see deploy/cloudflare).
+const BLAH_CONFIG_PATH = resolve(DIR_NAME, 'blah-server.config.json');
 const PRODUCTION_URL = 'https://web.telegram.org/a';
 
 const { version: APP_VERSION } = packageJson;
@@ -179,6 +181,9 @@ export default defineConfig(({ mode }): UserConfig => {
       exclude: ['temml'],
     },
     define: {
+      // BLAH: inject blah-server.config.json (or `undefined`) as a build-time
+      // constant so the client can be pointed at a local BlahMTProtoServer.
+      BLAH_SERVER_CONFIG: readBlahServerConfig(),
       APP_VERSION: JSON.stringify(APP_VERSION),
       CHANGELOG_DATETIME: JSON.stringify(statSync(CHANGELOG_PATH, { throwIfNoEntry: false })?.mtime.getTime()),
     },
@@ -277,10 +282,20 @@ function setViteEnv(env: Record<string, string>) {
   });
 }
 
+// BLAH: read blah-server.config.json and return the raw text Vite substitutes
+// for the BLAH_SERVER_CONFIG global. Absent/invalid file => the upstream setup.
+function readBlahServerConfig(): string {
+  try {
+    return JSON.stringify(JSON.parse(readFileSync(BLAH_CONFIG_PATH, 'utf-8')));
+  } catch {
+    return 'undefined';
+  }
+}
+
 function buildCsp(appEnv: string) {
   return `
   default-src 'self';
-  connect-src 'self' wss://*.web.telegram.org blob: http: https: ${appEnv === 'development' ? 'wss: ipc:' : ''};
+  connect-src 'self' wss://*.web.telegram.org blob: http: https: ${appEnv === 'development' ? 'ws: wss: ipc:' : ''};
   script-src 'self' 'wasm-unsafe-eval' https://t.me/_websync_ https://telegram.me/_websync_;
   style-src 'self' 'unsafe-inline';
   font-src 'self' data:;

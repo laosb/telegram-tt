@@ -11,7 +11,7 @@ In the Cloudflare dashboard, create a Worker and connect this repository, then:
 - **Deploy command:** `npx wrangler deploy` (default)
 - **Build variable** `BLAH_SERVER_CONFIG`: the `blah-server.config.json`
   contents as JSON (see `blah-server.config.example.json`). Omit to keep the
-  upstream production server. The build writes it to disk for webpack to read.
+  upstream production server. The build writes it to disk for Vite to read.
 
 `wrangler.jsonc` (repo root) holds the Worker name and the static-asset SPA
 settings. Set `name` to match your Worker. The account is the one connected to
