@@ -1,4 +1,5 @@
 import { concat } from '../../../util/encoding/buffer';
+import { getBlahRsaKeys } from '../blahServerConfig';
 
 import {
   generateRandomBytes,
@@ -8,15 +9,9 @@ import {
   sha1,
 } from '../Helpers';
 
-// BLAH: when blah-server.config.json supplies an rsaKey, register it first so
-// the client uses the local server's key (legacy sha1(data)+data+padding layout).
-const BLAH_KEYS = typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG?.rsaKey
-  ? [{
-    fingerprint: BigInt(BLAH_SERVER_CONFIG.rsaKey.fingerprint),
-    n: BigInt(`0x${BLAH_SERVER_CONFIG.rsaKey.nHex}`),
-    e: BLAH_SERVER_CONFIG.rsaKey.e,
-  }]
-  : [];
+// BLAH: when blah-server.config.json describes local DCs, register each DC's
+// RSA key first.
+const BLAH_KEYS = getBlahRsaKeys();
 
 export const SERVER_KEYS = [
   ...BLAH_KEYS,

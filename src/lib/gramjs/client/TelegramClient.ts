@@ -15,6 +15,7 @@ import type { UploadFileParams } from './uploadFile';
 import Deferred from '../../../util/Deferred';
 import { concat } from '../../../util/encoding/buffer';
 import { toJSNumber } from '../../../util/numbers';
+import { isBlahServerActive } from '../blahServerConfig'; // BLAH: local-server override
 import {
   FloodTestPhoneWaitError,
   FloodWaitError,
@@ -361,8 +362,7 @@ class TelegramClient {
       const DC = getDC(this.defaultDcId);
       // TODO Fill IP addresses for when `this._useIPV6` is used
       // BLAH: with a local-server override, use the DC's own port (e.g. 8443); otherwise keep 443/80.
-      const port = (typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG?.dc)
-        ? DC.port : (this._args.useWSS ? 443 : 80);
+      const port = isBlahServerActive() ? DC.port : (this._args.useWSS ? 443 : 80);
       this.session.setDC(
         this.defaultDcId, DC.ipAddress, port, this._args.isTestServerRequested,
       );

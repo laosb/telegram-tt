@@ -6,11 +6,15 @@ declare module '*.scss';
 declare const APP_VERSION: string;
 declare const CHANGELOG_DATETIME: number | undefined;
 
-// BLAH: build-time override (from blah-server.config.json) pointing the client
-// at a local BlahMTProtoServer. `undefined` keeps the upstream production setup.
+// BLAH: build-time override (from blah-server.config.json).
+type BlahRsaKey = { fingerprint: string; nHex: string; e: number };
 type BlahServerConfig = {
-  dc?: { id?: number; ip: string; port: number };
-  rsaKey?: { fingerprint: string; nHex: string; e: number };
+  defaultDcId?: number;
+  dcs?: Array<{
+    id: number;
+    endpoints: Array<{ ip: string; port: number }>;
+    rsaKey?: BlahRsaKey;
+  }>;
 };
 declare const BLAH_SERVER_CONFIG: BlahServerConfig | undefined;
 declare module 'virtual:git-info' {

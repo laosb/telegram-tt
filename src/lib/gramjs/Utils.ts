@@ -1,6 +1,7 @@
 import type { Entity } from './types';
 
 import { bufferFromHex, concat } from '../../util/encoding/buffer';
+import { getBlahDcOption } from './blahServerConfig'; // BLAH: local-server override
 import { Api } from './tl';
 
 // eslint-disable-next-line @stylistic/max-len
@@ -169,12 +170,10 @@ export function getDisplayName(entity: Entity) {
  * @return {{port: number, ipAddress: string, id: number}}
  */
 export function getDC(dcId: number, downloadDC = false) {
-  // BLAH: when blah-server.config.json supplies a dc, route every DC to the
-  // local BlahMTProtoServer. A non-443 port makes PromisedWebSockets pick ws://.
-  if (typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG?.dc) {
-    const { ip, port } = BLAH_SERVER_CONFIG.dc;
-    return { id: dcId, ipAddress: ip, port };
-  }
+  // BLAH: when blah-server.config.json describes local DCs, resolve the endpoint
+  // from it. A non-443 port makes PromisedWebSockets pick ws://.
+  const blahDc = getBlahDcOption(dcId);
+  if (blahDc) return blahDc;
   // TODO Move to external config
   switch (dcId) {
     case 1:
