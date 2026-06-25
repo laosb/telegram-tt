@@ -4,6 +4,7 @@ import {
   sessions,
   type Update,
 } from '../../../lib/gramjs';
+import { isBlahServerActive } from '../../../lib/gramjs/blahServerConfig'; // BLAH: local-server override
 import type { TwoFaParams } from '../../../lib/gramjs/client/2fa';
 import TelegramClient from '../../../lib/gramjs/client/TelegramClient';
 import { RPCError } from '../../../lib/gramjs/errors';
@@ -148,7 +149,7 @@ export async function init(initialArgs: ApiInitialArgs, onConnected?: NoneToVoid
         onError: onAuthError,
         // BLAH: BlahMTProtoServer only implements phone + SMS-code login (no QR / auth.exportLoginToken),
         // so force phone login whenever the local-server override is active.
-        initialMethod: (typeof BLAH_SERVER_CONFIG !== 'undefined' && BLAH_SERVER_CONFIG)
+        initialMethod: isBlahServerActive()
           ? 'phoneNumber'
           : (platform === 'iOS' || platform === 'Android' ? 'phoneNumber' : 'qrCode'),
         shouldThrowIfUnauthorized: Object.values(sessionData?.keys || {}).length > 0,
